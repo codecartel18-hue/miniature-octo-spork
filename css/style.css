@@ -1,0 +1,530 @@
+/* ==========================================================================
+   QUAD LOCKER — shared stylesheet
+   Frontend-only Lost & Found prototype. No backend/API/database required.
+   ========================================================================== */
+
+:root{
+  --yellow:#ffd21f; --red:#ef233c; --blue:#1976d2; --green:#35a853;
+  --ink:#17191d; --paper:#fffdf1; --cream:#f4efdf; --sky:#eaf4ff;
+  --muted:#6b6e73; --line:3px solid var(--ink); --shadow:5px 5px 0 var(--ink);
+  --radius-sm:8px; --radius-md:12px; --radius-lg:17px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#111;overflow-x:hidden}
+body{font-weight:700;width:100%}
+button,input,textarea,select{font:inherit;max-width:100%}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.app{width:100%;min-height:100dvh;background:var(--cream);display:flex;flex-direction:column;overflow-x:hidden}
+main.page{flex:1 0 auto;min-height:calc(100dvh - 70px);padding-bottom:40px;max-width:100%}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* ==========================================================================
+   NAVIGATION — hamburger-driven dropdown on every screen size where the
+   topbar itself is shown. Below the mobile-dock breakpoint the hamburger
+   and dropdown disappear entirely, because the bottom dock is the nav there.
+   ========================================================================== */
+.topbar{
+  min-height:70px;background:var(--yellow);border-bottom:var(--line);
+  position:sticky;top:0;z-index:50;
+}
+.topbar-inner{
+  max-width:1400px;margin:0 auto;min-height:70px;position:relative;
+  display:flex;align-items:center;gap:18px;flex-wrap:nowrap;
+  padding:0 clamp(16px,5%,70px);
+}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto;min-width:0}
+.brand-mark{
+  width:40px;height:40px;border-radius:50%;flex:0 0 auto;display:block;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.brand-name{font-size:20px;letter-spacing:-1px;line-height:1.1;overflow:hidden;text-overflow:ellipsis}
+.brand-name small{display:block;font-size:9px;letter-spacing:2px;margin-top:2px;font-weight:800}
+
+/* Dropdown nav: hidden until the hamburger opens it, then it drops down
+   below the topbar. Same markup/behaviour everywhere it's shown (desktop,
+   tablet) — only the mobile-dock breakpoint removes it from the page. */
+.main-nav{
+  position:absolute;top:100%;left:0;right:0;background:var(--paper);border:var(--line);
+  border-top:0;border-radius:0 0 14px 14px;flex-direction:column;align-items:stretch;
+  gap:0;padding:8px;display:none;box-shadow:6px 6px 0 -3px var(--ink);
+}
+.main-nav.open{display:flex}
+.nav-link{
+  padding:14px 12px;border-radius:8px;font-size:13px;font-weight:800;width:100%;
+  border:2px solid transparent;white-space:nowrap;
+}
+.nav-link:hover{background:rgba(0,0,0,.08)}
+.nav-link.active{background:#fff;border:2px solid var(--ink);box-shadow:none}
+.nav-link[hidden]{display:none!important}
+
+/* Right-hand actions: pinned to the far right now that the nav drops down
+   from the hamburger instead of sharing the row. */
+.nav-actions{flex:0 0 auto;display:flex;align-items:center;gap:8px;margin-left:auto;min-width:0}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:var(--line);border-radius:10px;padding:10px 16px;
+  box-shadow:3px 3px 0 var(--ink);font-size:13px;font-weight:800;white-space:nowrap;
+  background:#fff;
+}
+.btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+.btn-primary{background:var(--red);color:#fff}
+.btn-ghost{background:#fff}
+.btn-block{width:100%}
+.btn[hidden]{display:none!important}
+
+.user-chip{
+  display:flex;align-items:center;gap:8px;border:var(--line);background:#fff;
+  border-radius:10px;padding:6px 8px 6px 6px;box-shadow:3px 3px 0 var(--ink);
+}
+.user-chip-avatar{
+  width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 auto;
+}
+.user-chip-name{font-size:12px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip-logout{border:0;background:transparent;font-size:11px;font-weight:900;color:var(--red);padding:4px 6px}
+.user-chip[hidden]{display:none!important}
+
+/* ==========================================================================
+   NOTIFICATION CENTER — bell in the topbar for every signed-in user.
+   Populated from js/common.js (addNotification/getNotifications) and
+   triggered whenever admin advances an item's or a claim's status.
+   ========================================================================== */
+.notif-wrap{position:relative}
+.notif-wrap[hidden]{display:none!important}
+.notif-bell{
+  position:relative;width:42px;height:42px;border:var(--line);border-radius:10px;background:#fff;
+  box-shadow:3px 3px 0 var(--ink);font-size:17px;display:grid;place-items:center;flex:0 0 auto
+}
+.notif-bell:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.notif-badge{
+  position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:99px;
+  background:var(--red);color:#fff;border:2px solid var(--ink);font-size:9px;font-weight:900;
+  display:grid;place-items:center;line-height:1
+}
+.notif-badge[hidden]{display:none!important}
+.notif-panel{
+  display:none;position:absolute;right:0;top:calc(100% + 10px);width:min(340px,86vw);max-height:70vh;
+  overflow-y:auto;background:var(--paper,#fffdf3);border:var(--line);border-radius:14px;
+  box-shadow:6px 6px 0 var(--ink);z-index:60;padding:10px
+}
+.notif-panel.open{display:block}
+.notif-panel-head{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 10px;font-size:10px;font-weight:900;letter-spacing:1px}
+.notif-panel-head button{border:0;background:transparent;color:var(--blue);font-size:10px;font-weight:900;padding:2px 4px}
+.notif-list{display:flex;flex-direction:column;gap:6px}
+.notif-item{
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;
+  border:2px solid var(--ink);border-radius:9px;background:#f5f5f2;padding:9px 10px;font-size:11px;font-weight:700;width:100%
+}
+.notif-item.unread{background:#fff3ad}
+.notif-item small{font-size:9px;color:#777;font-weight:800}
+.notif-empty{padding:22px 8px;text-align:center;font-size:11px;color:#888}
+
+/* Hamburger — the only nav trigger whenever the topbar's nav is shown.
+   Animates to an X when open. Hidden below the mobile-dock breakpoint. */
+.menu-toggle{
+  display:flex;flex:0 0 auto;width:42px;height:42px;border:var(--line);border-radius:10px;
+  background:#fff;box-shadow:3px 3px 0 var(--ink);
+  flex-direction:column;align-items:center;justify-content:center;gap:5px;
+}
+.menu-toggle span{display:block;width:20px;height:3px;background:var(--ink);border-radius:2px;transition:transform .2s ease,opacity .2s ease}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+/* ==========================================================================
+   PAGE / HERO / SECTIONS
+   ========================================================================== */
+.hero{
+  min-height:520px;padding:75px 10%;display:grid;grid-template-columns:1.08fr .92fr;
+  gap:50px;align-items:center;background:linear-gradient(135deg,var(--paper) 0 62%,var(--sky) 62% 100%);
+  border-bottom:var(--line)
+}
+.eyebrow{color:var(--red);font-size:13px;letter-spacing:2px;margin-bottom:12px}
+.hero h1{font-size:clamp(55px,7vw,92px);line-height:.84;letter-spacing:-6px;margin:0 0 27px}
+.hero h1 .blue{color:var(--blue)}
+.hero-copy{max-width:610px;font-size:18px;line-height:1.5;font-weight:600}
+.hero-actions{display:flex;gap:12px;margin-top:25px;flex-wrap:wrap}
+.hero-art{display:flex;justify-content:center;align-items:center;min-height:290px}
+.art-card{
+  width:min(390px,90%);background:#fff;border:4px solid var(--ink);border-radius:22px;
+  box-shadow:9px 9px 0 var(--ink);padding:24px;transform:rotate(2deg)
+}
+.art-photo{
+  height:190px;border:3px solid var(--ink);border-radius:14px;background:
+  linear-gradient(135deg,#eee 25%,transparent 25%) 0 0/30px 30px,
+  linear-gradient(225deg,#ddd 25%,transparent 25%) 0 0/30px 30px,#fafafa;
+  display:grid;place-items:center;font-size:68px
+}
+.art-label{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.section{padding:60px 10%}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:28px}
+h2{font-size:45px;letter-spacing:-2.5px;margin:0}
+.sub{font-weight:600;color:var(--muted);line-height:1.45;max-width:600px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feature{background:#fff;border:var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);min-height:190px}
+.feature:nth-child(2){background:#dff0ff}.feature:nth-child(3){background:#fff2a9}
+.feature-icon{font-size:32px;margin-bottom:14px}.feature h3{margin:0 0 8px;font-size:20px}
+.feature p{margin:0;color:#444;line-height:1.45;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat-card{background:#fff;border:var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.stat-card strong{font-size:38px;display:block}
+.stat-card small{color:var(--muted)}
+
+/* ==========================================================================
+   DISCOVER / REELS
+   ========================================================================== */
+.discover-page{background:#0e0f11;color:#fff;min-height:calc(100dvh - 70px)}
+.discover-top{
+  height:70px;background:rgba(14,15,17,.96);display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid #303238;position:sticky;top:70px;z-index:20
+}
+.discover-title{font-size:20px}.discover-title span{color:var(--yellow)}
+.search-trigger{
+  width:42px;height:42px;border-radius:50%;border:2px solid #fff;background:#181a1e;color:#fff;
+  display:grid;place-items:center;font-size:22px
+}
+.reels-shell{
+  height:calc(100dvh - 140px);overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior-y:contain;
+  scrollbar-width:none;touch-action:pan-y;-webkit-overflow-scrolling:touch
+}
+.reels-shell::-webkit-scrollbar{display:none}
+.reel{
+  height:calc(100dvh - 140px);min-height:590px;scroll-snap-align:start;position:relative;
+  display:flex;justify-content:center;align-items:center;padding:18px
+}
+.reel-card{
+  width:min(540px,94vw);height:min(770px,calc(100dvh - 165px));min-height:550px;
+  position:relative;overflow:hidden;border-radius:20px;background:#222;border:2px solid #45474d
+}
+.reel-card img{width:100%;height:100%;object-fit:cover;filter:blur(22px);transform:scale(1.15);opacity:.88}
+.reel-card:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.2) 52%,rgba(0,0,0,.9) 100%)}
+.reel-private{
+  position:absolute;left:16px;top:16px;z-index:3;background:#fff;color:var(--ink);
+  border:2px solid var(--ink);padding:7px 10px;border-radius:9px;font-size:10px
+}
+.reel-info{position:absolute;z-index:4;left:22px;right:22px;bottom:22px}
+.reel-category{color:var(--yellow);font-size:12px;letter-spacing:1px}
+.reel-info h3{font-size:36px;line-height:.95;margin:7px 0 10px;letter-spacing:-1px}
+.reel-meta{font-size:13px;line-height:1.45;color:#eee;font-weight:600}
+.reel-claim{
+  display:block;width:100%;margin-top:12px;background:var(--yellow);color:var(--ink);
+  border:3px solid var(--ink);border-radius:10px;padding:11px
+}
+.reel-empty{height:100%;display:grid;place-items:center;text-align:center;padding:30px;color:#fff}
+.search-panel{
+  position:absolute;right:24px;top:60px;width:min(360px,calc(100vw - 40px));display:none;z-index:30;
+  pointer-events:none
+}
+.search-panel.open{display:block;pointer-events:auto}
+.search-panel input{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:11px;padding:12px 14px;width:100%;outline:0}
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+.form-wrap{max-width:1050px;margin:auto;padding:55px 7%}
+.form-tabs{display:flex;gap:10px;margin:24px 0}
+.tab{flex:1;padding:14px;border:var(--line);background:#fff;border-radius:11px;box-shadow:3px 3px 0 var(--ink)}
+.tab.active{background:var(--yellow)}
+.form-card{background:#fff;border:var(--line);border-radius:17px;box-shadow:var(--shadow);padding:30px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+label{display:block;font-size:12px;margin-bottom:7px}
+input,textarea,select{width:100%;border:3px solid var(--ink);border-radius:9px;background:#f5f5f2;padding:12px;outline:0;font-weight:600}
+textarea{min-height:115px;resize:vertical}
+.full{grid-column:1/-1}
+.camera{border:3px dashed var(--ink);border-radius:11px;padding:18px;background:#faf8e9}
+.camera input{border:0;background:transparent;padding:0}
+.form-note{font-size:11px;color:#666;line-height:1.4;font-weight:600}
+.char-count{font-size:10px;color:#888;margin-top:5px;text-align:right;font-weight:700}
+.char-count.near-limit{color:var(--red)}
+.submit-row{display:flex;justify-content:flex-end;margin-top:20px;gap:10px}
+.form-error{font-size:11px;color:var(--red);margin-top:6px;font-weight:800;display:none}
+.form-error.show{display:block}
+.form-page-wrap{max-width:520px;margin:0 auto;padding:60px 7% 80px}
+.form-foot-note{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+.form-foot-note a{color:var(--blue);text-decoration:underline;font-weight:900}
+
+/* ==========================================================================
+   PROFILE / USER DASHBOARD
+   ========================================================================== */
+.profile-head{padding:55px 7%;background:var(--sky);border-bottom:var(--line)}
+.profile-head h1{font-size:62px;letter-spacing:-4px;margin:0}
+.profile-layout{padding:40px 7%;display:grid;grid-template-columns:1fr 1.5fr;gap:24px;align-items:start}
+.profile-box,.credit-box{background:#fff;border:var(--line);border-radius:17px;box-shadow:var(--shadow);padding:24px}
+.avatar{width:78px;height:78px;background:var(--red);border:var(--line);border-radius:50%;display:grid;place-items:center;color:#fff;font-size:27px}
+.big-credit{font-size:68px;letter-spacing:-4px;margin:7px 0}
+.meter{height:18px;border:3px solid var(--ink);border-radius:99px;overflow:hidden;background:#eee}
+.meter span{display:block;height:100%;width:0;background:var(--green);transition:width .3s ease}
+.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.badge{border:3px solid var(--ink);padding:14px 9px;text-align:center;border-radius:11px;background:#fff3a6}
+.badge.locked{filter:grayscale(1);opacity:.45}.badge-icon{font-size:28px}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.dash-mini{border:2px solid var(--ink);border-radius:12px;padding:14px;background:#faf8e9}
+.dash-mini strong{font-size:26px;display:block}
+.dash-mini small{color:var(--muted);font-size:11px}
+.edit-profile-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+.edit-profile-head span{font-size:11px;letter-spacing:1px;color:var(--muted)}
+.icon-btn{
+  width:34px;height:34px;flex:0 0 auto;border:2px solid var(--ink);border-radius:9px;
+  background:#fff;box-shadow:2px 2px 0 var(--ink);font-size:14px;display:grid;place-items:center;
+}
+.icon-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.edit-profile-form{margin-top:12px;display:grid;gap:14px}
+.edit-profile-form input:disabled{background:#ececec;color:#555;border-color:#bbb}
+.edit-profile-form .btn[hidden]{display:none!important}
+.profile-account-actions{margin-top:24px;padding-top:20px;border-top:2px solid #ddd;display:grid;gap:10px}
+
+.my-reports-section{margin-top:12px;border-top:3px solid var(--ink);padding:28px 7% 60px}
+.section-heading-row{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.section-heading-row h2{margin:0}
+#myReportsCount{font-size:10px;font-weight:900;color:#777}
+.filter-tabs{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.filter-tab{border:2px solid var(--ink);background:#fff;border-radius:99px;padding:8px 14px;font-size:11px;font-weight:900}
+.filter-tab.active{background:var(--yellow)}
+.my-reports-list{display:grid;gap:12px;margin-top:16px}
+.my-report-card{border:3px solid var(--ink);border-radius:12px;padding:16px;background:#fff;display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px}
+/* Flex items default to min-width:auto, which lets an unbreakable string
+   (a long location/date) force the row wider than the card — and since
+   the page has overflow-x:hidden, that overflow gets silently clipped
+   instead of wrapping, making the meta column look "cut off"/hidden.
+   min-width:0 lets both columns actually shrink and wrap as intended. */
+.my-report-card > div{flex:1 1 240px;min-width:0}
+.my-report-card h3{margin:5px 0 6px}.my-report-card p{margin:0;color:#555;font-size:12px;line-height:1.45}
+.report-type{font-size:9px;font-weight:900;letter-spacing:1px}
+.report-type.role-claimant{color:var(--blue)}
+.my-report-meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:10px;font-weight:800;color:#666;text-align:right;flex:0 1 auto;min-width:0;max-width:100%}
+.reports-empty{border:2px dashed #999;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:5px;color:#666}
+.logout-btn{width:100%;border:3px solid var(--ink);background:#fff;border-radius:10px;padding:13px;font-weight:900;cursor:pointer;box-shadow:4px 4px 0 var(--ink)}
+
+/* ==========================================================================
+   ADMIN DASHBOARD
+   ========================================================================== */
+.admin-banner{background:#181b20;color:#fff;padding:12px 7%;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.admin-page{padding:40px 7%}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:25px 0}
+.admin-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px}
+.admin-search{flex:1 1 260px;max-width:340px}
+.admin-search input{background:#fff}
+.status-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.status-tab{border:2px solid var(--ink);background:#fff;border-radius:99px;padding:8px 14px;font-size:11px;font-weight:900}
+.status-tab.active{background:var(--yellow)}
+.admin-table{background:#fff;border:var(--line);border-radius:15px;overflow:auto;box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{text-align:left;padding:13px;border-bottom:2px solid #ddd;font-size:12px}
+th{background:var(--yellow);border-bottom:var(--line);position:sticky;top:0}
+.mini-img{width:62px;height:45px;object-fit:cover;border:2px solid var(--ink);border-radius:6px}
+.mini-btn{border:2px solid var(--ink);background:#fff;border-radius:7px;padding:6px 9px;font-size:10px;margin:2px}
+.mini-btn.blue{background:#bde1ff}.mini-btn.green{background:#bcebc5}.mini-btn.red{background:#ffc3cb}
+.status,.claim-status{display:inline-block;padding:6px 8px;border:2px solid var(--ink);border-radius:7px;font-size:10px}
+/* Item status flow: Reported → In secure storage → Match pending →
+   Verification pending → Verification approved → Ready for pickup →
+   Recovered, with an Unclaimed branch to Donated / Returned to finder /
+   Institutional property. See js/status.js for the full state machine. */
+.status.reported{background:#ffe48a}
+.status.in-secure-storage{background:#ffe1b3}
+.status.match-pending{background:#d8e8ff}
+.status.verification-pending{background:#bde1ff}
+.status.verification-approved{background:#a9d4ff}
+.status.ready-for-pickup{background:#d0f0d0}
+.status.recovered{background:#c7eccd}
+.status.unclaimed{background:#e9e9e9}
+.status.donated{background:#e4d6ff}
+.status.returned-to-finder{background:#ffe1e1}
+.status.institutional-property{background:#d8d8d8}
+/* Claim status flow: Submitted → Under review (⇄ More info requested) →
+   Approved/Declined → Ready for pickup → Completed. */
+.claim-status.submitted{background:#ffe48a}
+.claim-status.under-review{background:#bde1ff}
+.claim-status.more-info-requested{background:#ffd9a0}
+.claim-status.approved{background:#c7eccd}
+.claim-status.declined{background:#ffc3cb}
+.claim-status.ready-for-pickup{background:#d0f0d0}
+.claim-status.completed{background:#b9e6c2}
+.admin-empty{padding:40px;text-align:center;color:#777}
+
+/* ==========================================================================
+   STATUS STEPPER — shared between the admin detail dialog and the
+   reporter/claimant's My Reports card, so both sides see the identical
+   step sequence and current position for a given item or claim.
+   ========================================================================== */
+.status-stepper{display:flex;flex-wrap:wrap;align-items:center;gap:2px;margin:12px 0}
+.status-step{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:800;color:#9a9a9a;white-space:nowrap}
+.status-step .dot{width:11px;height:11px;border-radius:50%;border:2px solid #ccc;background:#fff;flex:0 0 auto}
+.status-step.done{color:#5c5c5c}
+.status-step.done .dot{background:var(--green);border-color:var(--ink)}
+.status-step.current{color:var(--ink)}
+.status-step.current .dot{background:var(--yellow);border-color:var(--ink);box-shadow:0 0 0 3px rgba(255,210,31,.35)}
+.status-connector{width:14px;height:2px;background:#ddd;flex:0 0 auto}
+.status-connector.done{background:var(--green)}
+.status-stepper.branch .status-step.current .dot{background:#c9a9ff}
+.status-stepper.declined .status-step.current .dot{background:var(--red);border-color:var(--ink)}
+.status-note{font-size:10px;font-weight:800;color:#a8650a;margin-top:6px}
+.detail-dialog{width:min(560px,100%);max-height:92vh;overflow:auto;background:var(--paper);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 #000;padding:28px}
+.detail-photo{width:100%;height:220px;object-fit:cover;border:3px solid var(--ink);border-radius:12px;margin:14px 0}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-top:10px}
+.detail-grid div{background:#f5f5f2;border-radius:8px;padding:10px}
+.detail-grid b{display:block;font-size:9px;color:var(--muted);margin-bottom:4px;letter-spacing:1px}
+
+/* Lost/Found request-type pill — admin table + detail dialog. */
+.type-pill{display:inline-block;padding:4px 8px;border:2px solid var(--ink);border-radius:99px;font-size:9px;font-weight:900;letter-spacing:.5px}
+.type-pill.lost{background:#ffd7d7}
+.type-pill.found{background:#d3f0d8}
+
+/* One card per claim in the admin detail dialog, so competing "I think
+   this is mine" submissions on the same found-item report sit side by
+   side and the admin can compare them before choosing the best owner. */
+.claims-section{margin-top:18px}
+.claims-section-head{font-size:10px;letter-spacing:1px;margin-bottom:8px}
+.claim-card{border:3px solid var(--ink);border-radius:12px;padding:13px;background:#fff3ad;margin-bottom:10px}
+.claim-card-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.claim-card-detail{margin:4px 0;font-size:12px;font-weight:700}
+.claim-card-desc{margin:4px 0;font-size:12px;color:#444;line-height:1.4}
+.claim-card-score{margin:4px 0;font-size:11px;color:#555}
+
+/* ==========================================================================
+   MODALS / LOGIN / CLAIM / TOAST
+   ========================================================================== */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;place-items:center;z-index:100;padding:20px}
+.modal.open{display:grid}
+.login{width:min(430px,100%);background:var(--paper);border:4px solid var(--ink);border-radius:17px;box-shadow:8px 8px 0 #000;padding:27px}
+.login h2{font-size:35px;margin:0 0 7px}
+.login .form-group{margin:16px 0}
+.close{float:right;border:3px solid var(--ink);background:#fff;border-radius:8px;width:35px;height:35px}
+.login-help{font-size:10px;color:#666;line-height:1.45;font-weight:600}
+.claim-dialog{
+  width:min(560px,100%);max-height:92vh;overflow:auto;background:var(--paper);
+  border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 #000;padding:28px
+}
+.claim-dialog h2{font-size:42px;line-height:.95;margin:0 0 10px}
+.claim-item{
+  display:flex;justify-content:space-between;align-items:center;gap:15px;
+  background:#eaf4ff;border:3px solid var(--ink);border-radius:11px;padding:13px 15px;margin:20px 0
+}
+.claim-item strong{font-size:18px}.claim-item span{font-size:10px;color:#555;text-align:right}
+.claim-field{margin:18px 0}
+.claim-field small{display:block;margin-top:6px;color:#686868;font-size:10px;line-height:1.4;font-weight:600}
+.claim-check{
+  display:flex;gap:10px;align-items:flex-start;background:#fff3ad;border:3px solid var(--ink);
+  border-radius:10px;padding:12px;margin:18px 0;font-size:11px;line-height:1.35
+}
+.claim-check span{font-size:20px}
+.success-dialog{position:relative;width:min(460px,100%);background:var(--paper);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 #000;padding:30px;text-align:center}
+.success-dialog .close{position:absolute;right:14px;top:14px;float:none}
+.success-mark{width:68px;height:68px;margin:0 auto 18px;border:4px solid var(--ink);border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:38px;box-shadow:4px 4px 0 var(--ink)}
+.success-dialog h2{font-size:43px;line-height:.92;letter-spacing:-2px;margin:0 0 12px}
+.success-dialog p{font-size:14px;line-height:1.5;font-weight:600;color:#555;margin:0 0 20px}
+.success-status{display:flex;align-items:center;justify-content:space-between;gap:12px;border:3px solid var(--ink);border-radius:10px;background:#fff3ad;padding:12px 14px;margin-bottom:18px;font-size:10px}
+.success-status strong{font-size:11px}
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100vw - 32px));background:#fff;color:var(--ink);border:4px solid var(--ink);border-radius:18px;padding:24px 22px;display:none;z-index:120;font-size:14px;text-align:center;box-shadow:8px 8px 0 #000}
+.toast:before{content:"✓";display:grid;place-items:center;width:46px;height:46px;margin:0 auto 12px;background:var(--green);border:3px solid var(--ink);border-radius:50%;font-size:25px}
+.toast.show{display:block}
+.auth-feedback{
+  display:none;margin:0 0 16px;padding:13px 15px;border:3px solid var(--ink);
+  border-radius:10px;background:#fff3ad;font-size:12px;font-weight:800;
+  line-height:1.35;box-shadow:3px 3px 0 var(--ink)
+}
+.auth-feedback.show{display:block}
+.auth-feedback.success{background:#dff7df}
+.auth-feedback.error{background:#ffdede}
+.auth-feedback .feedback-title{display:block;font-size:13px;margin-bottom:3px}
+/* Public Discover cards never expose lifecycle labels */
+.reel-card .status{display:none!important}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer{
+  width:100%;border-top:3px solid var(--ink);background:var(--paper);
+  padding:24px clamp(18px,5vw,72px) calc(24px + env(safe-area-inset-bottom));
+  display:flex;justify-content:space-between;align-items:center;gap:20px;
+  box-sizing:border-box;flex:0 0 auto;
+}
+.footer-brand{display:flex;flex-direction:column;gap:4px}
+.footer-brand strong{font-size:18px;letter-spacing:-.5px}
+.footer-brand span,.footer-meta{font-size:10px;font-weight:700;color:#666}
+.footer-meta{display:flex;gap:20px;align-items:center;text-align:right}
+
+/* ==========================================================================
+   MOBILE DOCK (quick actions bar)
+   ========================================================================== */
+.dock-wrap{display:none}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media(max-width:1050px){
+  .hero{padding-left:7%;padding-right:7%}
+}
+/* Below 760px the persistent bottom dock (see MOBILE DOCK) takes over
+   navigation entirely, so the topbar's hamburger + dropdown are removed
+   rather than duplicating what the dock already does. Above 760px the
+   hamburger/dropdown from the NAVIGATION block above is always in effect. */
+@media(max-width:760px){
+  .menu-toggle{display:none}
+  .main-nav{display:none!important}
+  .nav-actions .btn-ghost{display:none}
+
+  .claim-dialog{padding:22px;border-width:3px;box-shadow:5px 5px 0 #000}
+  .claim-dialog h2{font-size:35px}
+  .claim-item{display:block}
+  .claim-item span{display:block;text-align:left;margin-top:5px}
+
+  .topbar-inner{min-height:62px;padding:0 14px;gap:10px}
+  .brand-mark{width:34px;height:34px}
+  .brand-name{font-size:16px}.brand-name small{font-size:7px}
+  .user-chip-name{max-width:70px}
+  main.page{min-height:calc(100dvh - 62px);padding-bottom:110px}
+  .hero{min-height:auto;padding:48px 22px 50px;display:block;background:linear-gradient(135deg,var(--paper) 0 72%,var(--sky) 72%)}
+  .hero h1{font-size:58px;letter-spacing:-4px}.hero-copy{font-size:16px}
+  .hero-art{min-height:240px;margin-top:28px}.art-card{width:85%;padding:17px}.art-photo{height:150px}
+  .section{padding:48px 22px}.section-head{display:block}.section-head .sub{margin-top:15px}
+  h2{font-size:38px}.feature-grid,.stats{grid-template-columns:1fr}
+  .feature{min-height:auto}
+  .discover-top{height:60px;padding:0 15px;position:sticky;top:62px}
+  .discover-page{min-height:calc(100dvh - 62px)}
+  .reels-shell{height:calc(100dvh - 122px)}
+  .reel{height:calc(100dvh - 122px);min-height:560px;padding:0}
+  .reel-card{width:100%;height:calc(100dvh - 122px);min-height:560px;border-radius:0;border-left:0;border-right:0}
+  .reel-info{left:18px;right:18px;bottom:calc(90px + env(safe-area-inset-bottom))}.reel-info h3{font-size:31px}
+  .search-panel{right:15px;top:51px}
+  .form-wrap,.admin-page,.profile-layout{padding-left:22px;padding-right:22px}
+  .my-reports-section{padding-left:22px;padding-right:22px}
+  .profile-head{padding:45px 22px}.profile-head h1{font-size:50px}
+  .profile-layout{grid-template-columns:1fr}
+  .profile-box,.credit-box{min-width:0;width:100%}
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .dash-mini{min-width:0}
+  /* My Reports cards: stack the item text above the meta tags instead of
+     squeezing them side-by-side, which is what was pushing the meta
+     column off the right edge of the screen (see min-width:0 fix above). */
+  .my-report-card{flex-direction:column;align-items:stretch}
+  .my-report-card > div{flex:1 1 auto;width:100%}
+  .my-report-meta{flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;width:100%}
+  .status-stepper{gap:2px 1px}
+  .form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+  .detail-grid{grid-template-columns:1fr}
+  .badge-grid{grid-template-columns:1fr 1fr 1fr}
+  .admin-banner{padding-left:22px;padding-right:22px}
+  .admin-stats{grid-template-columns:1fr 1fr}
+  .admin-toolbar{flex-direction:column;align-items:stretch}
+  .admin-search{max-width:none}
+  .dock-wrap{
+    display:flex;position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:0;right:0;justify-content:center;z-index:40;pointer-events:none
+  }
+  .dock{
+    width:calc(100% - 18px);max-width:560px;background:#fff;border:3px solid var(--ink);border-radius:16px;
+    box-shadow:5px 5px 0 var(--ink);padding:5px;display:flex;pointer-events:auto
+  }
+  .dock a,.dock button{flex:1;border:0;background:transparent;border-radius:11px;padding:7px 4px;font-size:10px;text-align:center}
+  .dock a.active,.dock button.active{background:var(--yellow);border:2px solid var(--ink);padding:5px 3px}
+  .dock .icon{font-size:18px;display:block;margin-bottom:2px}
+  .success-dialog{padding:24px;border-width:3px;box-shadow:5px 5px 0 #000}
+  .success-dialog h2{font-size:36px}
+  .site-footer{padding-bottom:120px;flex-direction:column;align-items:flex-start}
+  .footer-meta{flex-direction:column;align-items:flex-start;gap:6px;text-align:left}
+  .form-page-wrap{padding:40px 7% 100px}
+  .notif-panel{right:-46px;width:calc(100vw - 24px)}
+  .claim-card-head{gap:6px}
+}

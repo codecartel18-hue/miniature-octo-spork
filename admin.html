@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin console — Quad Locker</title>
+<link rel="icon" type="image/svg+xml" href="img/favicon-sih.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admin">
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-mark" src="img/favicon-sih.png" alt="Quad Locker logo">
+      <span class="brand-name">QUAD LOCKER<small>LOST + FOUND MANAGEMENT</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="discover.html" class="nav-link" data-page="discover">Discover</a>
+      <a href="report.html" class="nav-link" data-page="report">Report</a>
+      <a href="profile.html" class="nav-link" data-page="profile">Profile</a>
+      <a href="admin.html" class="nav-link" data-page="admin" hidden>Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="notif-wrap" id="notifWrap" hidden>
+        <button class="notif-bell" id="notifBell" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head"><span>NOTIFICATIONS</span><button type="button" id="notifMarkAllBtn">Mark all read</button></div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
+      <div class="user-chip" id="userChip" hidden>
+        <span class="user-chip-avatar" id="userChipAvatar"></span>
+        <span class="user-chip-name" id="userChipName"></span>
+        <button class="user-chip-logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+      <a href="login.html" class="btn btn-ghost" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerLink">Register</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="admin" class="page active">
+  <div class="admin-banner"><strong>ADMIN CONSOLE</strong><span id="adminEmailLabel">Not signed in</span></div>
+  <div class="admin-page">
+    <div class="eyebrow">PRIVATE ADMIN VIEW</div>
+    <h2>CONTROL ROOM.</h2>
+    <p class="sub">Clear images, reports, physical collection, verification, claims and handover status are managed here.</p>
+
+    <div class="admin-stats">
+      <div class="stat-card"><strong id="statAllReports">0</strong><small>Total reports</small></div>
+      <div class="stat-card"><strong id="statClaims">0</strong><small>Active claims</small></div>
+      <div class="stat-card"><strong id="statVerify">0</strong><small>In verification</small></div>
+      <div class="stat-card"><strong id="statReturnedAdmin">0</strong><small>Recovered</small></div>
+    </div>
+    <div class="admin-toolbar" style="margin-bottom:0">
+      <button class="status-tab" id="jumpClaimsBtn" type="button" style="background:#fff3ad">🔔 Jump to pending claims</button>
+    </div>
+
+    <div class="admin-toolbar">
+      <div class="status-tabs" id="typeTabs">
+        <button class="status-tab active" data-type="all" type="button">All requests</button>
+        <button class="status-tab" data-type="found" type="button">Found</button>
+        <button class="status-tab" data-type="lost" type="button">Lost</button>
+      </div>
+    </div>
+
+    <div class="admin-toolbar">
+      <div class="status-tabs" id="statusTabs">
+        <button class="status-tab active" data-status="all" type="button">All statuses</button>
+        <button class="status-tab" data-status="REPORTED" type="button">Reported</button>
+        <button class="status-tab" data-status="IN_SECURE_STORAGE" type="button">In storage</button>
+        <button class="status-tab" data-status="MATCH_PENDING" type="button">Match pending</button>
+        <button class="status-tab" data-status="VERIFICATION_PENDING" type="button">Verification pending</button>
+        <button class="status-tab" data-status="VERIFICATION_APPROVED" type="button">Verification approved</button>
+        <button class="status-tab" data-status="READY_FOR_PICKUP" type="button">Ready for pickup</button>
+        <button class="status-tab" data-status="RECOVERED" type="button">Recovered</button>
+        <button class="status-tab" data-status="UNCLAIMED" type="button">Unclaimed</button>
+      </div>
+      <div class="admin-search">
+        <input id="adminSearch" placeholder="Search item, reporter, claimant or location..." maxlength="80">
+      </div>
+    </div>
+
+    <div class="admin-table">
+      <table>
+        <thead><tr><th>PHOTO</th><th>TYPE</th><th>ITEM</th><th>REPORTER</th><th>LOCATION</th><th>STATUS</th><th>ACTION</th></tr></thead>
+        <tbody id="adminRows"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+</div>
+
+<!-- REPORT DETAIL -->
+<div class="modal" id="detailModal">
+  <div class="detail-dialog">
+    <button class="close" type="button" onclick="closeDetail()">×</button>
+    <div class="eyebrow">REPORT DETAIL</div>
+    <h2 id="detailName" style="font-size:32px;margin:0 0 6px">Item</h2>
+    <span class="type-pill" id="detailType">Found</span>
+    <span class="status" id="detailStatus">Reported</span>
+    <div id="detailItemStepper"></div>
+    <img class="detail-photo" id="detailPhoto" src="" alt="">
+    <p id="detailDesc" style="font-weight:600;color:#444;line-height:1.5"></p>
+    <div class="detail-grid">
+      <div><b>CATEGORY</b><span id="detailCat"></span></div>
+      <div><b>LOCATION</b><span id="detailLocation"></span></div>
+      <div><b>DATE</b><span id="detailDate"></span></div>
+      <div><b>REPORTED BY</b><span id="detailOwner"></span></div>
+    </div>
+
+    <div class="submit-row" style="justify-content:flex-start;flex-wrap:wrap" id="detailItemActions"></div>
+
+    <div id="detailClaimsSection" class="claims-section" style="display:none">
+      <div class="claims-section-head">CLAIMS ON THIS ITEM — COMPARE &amp; CHOOSE THE BEST OWNER</div>
+      <div id="detailClaimsList"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <strong>QUAD LOCKER</strong>
+    <span>Campus Lost &amp; Found</span>
+  </div>
+  <div class="footer-meta">
+    <span>Report honestly. Return responsibly.</span>
+    <span>© 2026 QUAD LOCKER</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE DOCK -->
+<div class="dock-wrap">
+  <nav class="dock">
+    <a data-page="home" href="index.html"><span class="icon">⌂</span>HOME</a>
+    <a data-page="discover" href="discover.html"><span class="icon">⌕</span>DISCOVER</a>
+    <a data-page="report" href="report.html"><span class="icon">＋</span>REPORT</a>
+    <a data-page="profile" href="profile.html"><span class="icon">◉</span>PROFILE</a>
+    <a data-page="admin" href="admin.html"><span class="icon">▣</span>ADMIN</a>
+  </nav>
+</div>
+
+<script src="js/seed-data.js"></script>
+<script src="js/status.js"></script>
+<script src="js/common.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

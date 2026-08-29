@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report an item — Quad Locker</title>
+<link rel="icon" type="image/svg+xml" href="img/favicon-sih.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="report">
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-mark" src="img/favicon-sih.png" alt="Quad Locker logo">
+      <span class="brand-name">QUAD LOCKER<small>LOST + FOUND MANAGEMENT</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="discover.html" class="nav-link" data-page="discover">Discover</a>
+      <a href="report.html" class="nav-link" data-page="report">Report</a>
+      <a href="profile.html" class="nav-link" data-page="profile">Profile</a>
+      <a href="admin.html" class="nav-link" data-page="admin" hidden>Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="notif-wrap" id="notifWrap" hidden>
+        <button class="notif-bell" id="notifBell" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head"><span>NOTIFICATIONS</span><button type="button" id="notifMarkAllBtn">Mark all read</button></div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
+      <div class="user-chip" id="userChip" hidden>
+        <span class="user-chip-avatar" id="userChipAvatar"></span>
+        <span class="user-chip-name" id="userChipName"></span>
+        <button class="user-chip-logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+      <a href="login.html" class="btn btn-ghost" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerLink">Register</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="report" class="page active">
+  <div class="form-wrap">
+    <div class="eyebrow">REPORT SOMETHING</div>
+    <h2>Put it on the system.</h2>
+    <p class="sub">Found an item? Photograph it and submit the item to the admin. Credits are awarded after physical submission. Lost something? Add private ownership details so the admin can verify future claims.</p>
+
+    <div class="form-tabs">
+      <button class="tab active" id="lostTab" type="button" onclick="switchReport('lost')">I LOST SOMETHING</button>
+      <button class="tab" id="foundTab" type="button" onclick="switchReport('found')">I FOUND SOMETHING</button>
+    </div>
+
+    <form class="form-card" id="reportForm" onsubmit="submitReport(event)">
+      <input type="hidden" id="reportType" value="lost">
+      <div class="form-grid">
+        <div>
+          <label>ITEM NAME *</label>
+          <input id="itemName" required maxlength="80" placeholder="e.g. Casio calculator">
+        </div>
+        <div>
+          <label>CATEGORY *</label>
+          <select id="category" required>
+            <option>Electronics</option><option>ID Cards</option><option>Books</option><option>Water bottle</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label>DATE *</label>
+          <input id="itemDate" type="date" required>
+        </div>
+        <div>
+          <label>LOCATION *</label>
+          <input id="location" required maxlength="100" placeholder="e.g. Block A — Lab 204">
+        </div>
+        <div class="full">
+          <label>PRIVATE ITEM / OWNERSHIP DESCRIPTION *</label>
+          <textarea id="description" required maxlength="800" placeholder="Include details that can prove ownership: stickers, scratches, initials, marks, contents, unique features..."></textarea>
+          <div class="char-count" id="descCount">0 / 800</div>
+        </div>
+        <div class="full camera">
+          <label>PHOTO / CAMERA</label>
+          <input id="photo" type="file" accept="image/*" capture="environment">
+        </div>
+      </div>
+      <div class="submit-row"><button class="btn btn-primary" type="submit">Send to admin →</button></div>
+    </form>
+  </div>
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <strong>QUAD LOCKER</strong>
+    <span>Campus Lost &amp; Found</span>
+  </div>
+  <div class="footer-meta">
+    <span>Report honestly. Return responsibly.</span>
+    <span>© 2026 QUAD LOCKER</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE DOCK -->
+<div class="dock-wrap">
+  <nav class="dock">
+    <a data-page="home" href="index.html"><span class="icon">⌂</span>HOME</a>
+    <a data-page="discover" href="discover.html"><span class="icon">⌕</span>DISCOVER</a>
+    <a data-page="report" href="report.html"><span class="icon">＋</span>REPORT</a>
+    <a data-page="profile" href="profile.html"><span class="icon">◉</span>PROFILE</a>
+    <a data-page="admin" href="admin.html" hidden><span class="icon">▣</span>ADMIN</a>
+  </nav>
+</div>
+
+<script src="js/seed-data.js"></script>
+<script src="js/status.js"></script>
+<script src="js/common.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>

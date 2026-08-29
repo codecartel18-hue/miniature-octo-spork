@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover — Quad Locker</title>
+<link rel="icon" type="image/svg+xml" href="img/favicon-sih.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="discover">
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-mark" src="img/favicon-sih.png" alt="Quad Locker logo">
+      <span class="brand-name">QUAD LOCKER<small>LOST + FOUND MANAGEMENT</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="discover.html" class="nav-link" data-page="discover">Discover</a>
+      <a href="report.html" class="nav-link" data-page="report">Report</a>
+      <a href="profile.html" class="nav-link" data-page="profile">Profile</a>
+      <a href="admin.html" class="nav-link" data-page="admin" hidden>Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="notif-wrap" id="notifWrap" hidden>
+        <button class="notif-bell" id="notifBell" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head"><span>NOTIFICATIONS</span><button type="button" id="notifMarkAllBtn">Mark all read</button></div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
+      <div class="user-chip" id="userChip" hidden>
+        <span class="user-chip-avatar" id="userChipAvatar"></span>
+        <span class="user-chip-name" id="userChipName"></span>
+        <button class="user-chip-logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+      <a href="login.html" class="btn btn-ghost" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerLink">Register</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="discover" class="page discover-page active">
+  <div class="discover-top">
+    <div class="discover-title">Discover <span>• unclaimed items</span></div>
+    <button class="search-trigger" onclick="toggleSearch()" aria-label="Search reports">⌕</button>
+    <div class="search-panel" id="searchPanel">
+      <input id="searchInput" oninput="renderDiscover()" placeholder="Search item, category or location..." maxlength="80">
+    </div>
+  </div>
+  <div class="reels-shell" id="reelsShell"></div>
+</main>
+
+</div>
+
+<!-- CLAIM / OWNERSHIP VERIFICATION -->
+<div class="modal" id="claimModal">
+  <div class="claim-dialog">
+    <button class="close" onclick="closeClaim()">×</button>
+    <div class="eyebrow">OWNERSHIP VERIFICATION</div>
+    <h2>PROVE IT'S YOURS.</h2>
+    <p class="sub">Give details that another student would be unlikely to know. These answers stay private and are reviewed by the admin.</p>
+
+    <div class="claim-item" id="claimItemPreview">
+      <strong id="claimItemName">Item</strong>
+      <span id="claimItemMeta">Category • Location</span>
+    </div>
+
+    <form onsubmit="submitClaim(event)">
+      <input type="hidden" id="claimReportId">
+
+      <div class="claim-field">
+        <label>01 — EXACT UNIQUE DETAIL *</label>
+        <input id="uniqueDetail" required maxlength="120"
+          placeholder="e.g. Blue star sticker under the battery cover">
+        <small>Enter one precise, private feature of the item.</small>
+      </div>
+
+      <div class="claim-field">
+        <label>02 — DETAILED DESCRIPTION *</label>
+        <textarea id="claimDescription" required maxlength="600"
+          placeholder="Describe the item in your own words: scratches, stickers, initials, contents, model details, marks, or other proof of ownership."></textarea>
+        <div class="char-count" id="claimDescCount">0 / 600</div>
+        <small>Your description is compared with the original description submitted by the finder.</small>
+      </div>
+
+      <div class="claim-check">
+        <span>🔐</span>
+        <div><b>PRIVATE VERIFICATION</b><br></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" type="submit">SUBMIT FOR VERIFICATION →</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="successModal" aria-modal="true" role="dialog">
+  <div class="success-dialog">
+    <button class="close" onclick="closeSuccess()">×</button>
+    <div class="success-mark">✓</div>
+    <div class="eyebrow">REQUEST SUBMITTED</div>
+    <h2 id="successTitle">CLAIM SENT.</h2>
+    <p id="successMessage">Your ownership request has been sent to the Lost &amp; Found desk for private verification.</p>
+    <div class="success-status"><span>STATUS</span><strong id="successStatus">CLAIM UNDER REVIEW</strong></div>
+    <button class="btn btn-primary btn-block" onclick="closeSuccess()">DONE →</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <strong>QUAD LOCKER</strong>
+    <span>Campus Lost &amp; Found</span>
+  </div>
+  <div class="footer-meta">
+    <span>Report honestly. Return responsibly.</span>
+    <span>© 2026 QUAD LOCKER</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE DOCK -->
+<div class="dock-wrap">
+  <nav class="dock">
+    <a data-page="home" href="index.html"><span class="icon">⌂</span>HOME</a>
+    <a data-page="discover" href="discover.html"><span class="icon">⌕</span>DISCOVER</a>
+    <a data-page="report" href="report.html"><span class="icon">＋</span>REPORT</a>
+    <a data-page="profile" href="profile.html"><span class="icon">◉</span>PROFILE</a>
+    <a data-page="admin" href="admin.html" hidden><span class="icon">▣</span>ADMIN</a>
+  </nav>
+</div>
+
+<script src="js/seed-data.js"></script>
+<script src="js/status.js"></script>
+<script src="js/common.js"></script>
+<script src="js/discover.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — Quad Locker</title>
+<link rel="icon" type="image/svg+xml" href="img/favicon-sih.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="profile">
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-mark" src="img/favicon-sih.png" alt="Quad Locker logo">
+      <span class="brand-name">QUAD LOCKER<small>LOST + FOUND MANAGEMENT</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="discover.html" class="nav-link" data-page="discover">Discover</a>
+      <a href="report.html" class="nav-link" data-page="report">Report</a>
+      <a href="profile.html" class="nav-link" data-page="profile">Profile</a>
+      <a href="admin.html" class="nav-link" data-page="admin" hidden>Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="notif-wrap" id="notifWrap" hidden>
+        <button class="notif-bell" id="notifBell" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head"><span>NOTIFICATIONS</span><button type="button" id="notifMarkAllBtn">Mark all read</button></div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
+      <div class="user-chip" id="userChip" hidden>
+        <span class="user-chip-avatar" id="userChipAvatar"></span>
+        <span class="user-chip-name" id="userChipName"></span>
+        <button class="user-chip-logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+      <a href="login.html" class="btn btn-ghost" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerLink">Register</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="profile" class="page active">
+  <div class="profile-head">
+    <div class="eyebrow">YOUR PROFILE</div>
+    <h1>HONESTY, TRACKED.</h1>
+    <p class="sub">Earn credits when your found-item contribution is physically submitted and verified by the admin.</p>
+  </div>
+  <div class="profile-layout">
+    <div class="profile-box">
+      <div class="avatar" id="profileAvatar">SU</div>
+      <h2 id="profileUserName" style="font-size:30px;margin:15px 0 5px">Student User</h2>
+      <p class="sub" id="profileUserEmail">Student • Campus account</p>
+
+      <div class="edit-profile-head">
+        <span>ACCOUNT DETAILS</span>
+        <button class="icon-btn" id="editToggleBtn" type="button" aria-label="Edit profile" data-editing="false">✎</button>
+      </div>
+      <form class="edit-profile-form" id="editProfileForm">
+        <div>
+          <label>FULL NAME</label>
+          <input id="editName" required maxlength="60" placeholder="Your full name" disabled>
+        </div>
+        <div>
+          <label>EMAIL</label>
+          <input id="editEmail" type="email" required maxlength="80" placeholder="you@college.edu" disabled>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit" id="saveProfileBtn" hidden>Save changes</button>
+      </form>
+
+      <div class="profile-account-actions">
+        <button class="logout-btn" id="logoutBtn2" type="button">Logout →</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="credit-box">
+        <div class="eyebrow">HONESTY CREDITS</div>
+        <div class="big-credit" id="creditNumber">0</div>
+        <p class="sub" id="creditNextLabel">Next badge at 50 credits</p>
+        <div class="meter"><span id="creditMeter"></span></div>
+        <div class="badge-grid">
+          <div class="badge locked" id="badgeSamaritan"><div class="badge-icon">⭐</div><div>Good Samaritan</div><small>50+</small></div>
+          <div class="badge locked" id="badgeHero"><div class="badge-icon">🏅</div><div>Campus Hero</div><small>100+</small></div>
+          <div class="badge locked" id="badgeCert"><div class="badge-icon">📜</div><div>Honesty Certificate</div><small>200+</small></div>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-mini"><strong id="statTotalReports">0</strong><small>Total reports</small></div>
+          <div class="dash-mini"><strong id="statFoundReports">0</strong><small>Items found</small></div>
+          <div class="dash-mini"><strong id="statReturnedReports">0</strong><small>Recovered</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-reports-section">
+    <div class="section-heading-row">
+      <h2>MY REPORTS</h2>
+      <span id="myReportsCount">0 reports</span>
+    </div>
+    <div class="filter-tabs" id="myReportsFilters">
+      <button class="filter-tab active" data-filter="all" type="button">All</button>
+      <button class="filter-tab" data-filter="lost" type="button">Lost</button>
+      <button class="filter-tab" data-filter="found" type="button">Found</button>
+    </div>
+    <div class="my-reports-list" id="myReportsList"></div>
+  </div>
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <strong>QUAD LOCKER</strong>
+    <span>Campus Lost &amp; Found</span>
+  </div>
+  <div class="footer-meta">
+    <span>Report honestly. Return responsibly.</span>
+    <span>© 2026 QUAD LOCKER</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE DOCK -->
+<div class="dock-wrap">
+  <nav class="dock">
+    <a data-page="home" href="index.html"><span class="icon">⌂</span>HOME</a>
+    <a data-page="discover" href="discover.html"><span class="icon">⌕</span>DISCOVER</a>
+    <a data-page="report" href="report.html"><span class="icon">＋</span>REPORT</a>
+    <a data-page="profile" href="profile.html"><span class="icon">◉</span>PROFILE</a>
+    <a data-page="admin" href="admin.html" hidden><span class="icon">▣</span>ADMIN</a>
+  </nav>
+</div>
+
+<script src="js/seed-data.js"></script>
+<script src="js/status.js"></script>
+<script src="js/common.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

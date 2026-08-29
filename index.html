@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- QUAD LOCKER prototype is frontend-only. No backend/API/database is required. -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quad Locker — Lost &amp; Found</title>
+<link rel="icon" type="image/svg+xml" href="img/favicon-sih.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <img class="brand-mark" src="img/favicon-sih.png" alt="Quad Locker logo">
+      <span class="brand-name">QUAD LOCKER<small>LOST + FOUND MANAGEMENT</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="discover.html" class="nav-link" data-page="discover">Discover</a>
+      <a href="report.html" class="nav-link" data-page="report">Report</a>
+      <a href="profile.html" class="nav-link" data-page="profile">Profile</a>
+      <a href="admin.html" class="nav-link" data-page="admin" hidden>Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="notif-wrap" id="notifWrap" hidden>
+        <button class="notif-bell" id="notifBell" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+          🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-head"><span>NOTIFICATIONS</span><button type="button" id="notifMarkAllBtn">Mark all read</button></div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+      </div>
+      <div class="user-chip" id="userChip" hidden>
+        <span class="user-chip-avatar" id="userChipAvatar"></span>
+        <span class="user-chip-name" id="userChipName"></span>
+        <button class="user-chip-logout" id="logoutBtn" type="button">Logout</button>
+      </div>
+      <a href="login.html" class="btn btn-ghost" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-primary" id="registerLink">Register</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="home" class="page active">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">CAMPUS COMMUNITY • LOST + FOUND</div>
+      <h1>FIND.<br><span class="blue">VERIFY.</span><br>RETURN.</h1>
+      <p class="hero-copy">One secure place for students to report lost or found items, discover potential matches and complete verified handovers.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="report.html">Report an item →</a>
+        <a class="btn btn-ghost" href="discover.html">Discover items</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="art-card">
+        <div class="art-photo">🔎</div>
+        <div class="art-label"><strong>SEARCH • VERIFY • RETURN</strong><span>01</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><div class="eyebrow">HOW IT WORKS</div><h2>Simple for students.</h2></div>
+    </div>
+    <div class="feature-grid">
+      <article class="feature"><div class="feature-icon">📋</div><h3>01 — Report</h3><p>Submit a lost or found report with date, location, category, description and photo.</p></article>
+      <article class="feature"><div class="feature-icon">🔐</div><h3>02 — Verify</h3><p>Potential owners provide private details. Their answer is compared with the finder's description before approval.</p></article>
+      <article class="feature"><div class="feature-icon">🏆</div><h3>03 — Return</h3><p>Admin completes the handover. Verified finders earn honesty credits toward badges and certification.</p></article>
+    </div>
+  </section>
+
+  <section class="section" style="background:#fff;border-top:var(--line)">
+    <div class="section-head"><div><div class="eyebrow">LIVE OVERVIEW</div><h2>Campus status.</h2></div></div>
+    <div class="stats" id="homeStats">
+      <div class="stat-card"><strong id="statOpen">—</strong><span>Open reports</span></div>
+      <div class="stat-card"><strong id="statVerification">—</strong><span>Items in verification</span></div>
+      <div class="stat-card"><strong id="statReturned">—</strong><span>Items recovered</span></div>
+    </div>
+  </section>
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    <strong>QUAD LOCKER</strong>
+    <span>Campus Lost &amp; Found</span>
+  </div>
+  <div class="footer-meta">
+    <span>Report honestly. Return responsibly.</span>
+    <span>© 2026 QUAD LOCKER</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE DOCK -->
+<div class="dock-wrap">
+  <nav class="dock">
+    <a data-page="home" href="index.html"><span class="icon">⌂</span>HOME</a>
+    <a data-page="discover" href="discover.html"><span class="icon">⌕</span>DISCOVER</a>
+    <a data-page="report" href="report.html"><span class="icon">＋</span>REPORT</a>
+    <a data-page="profile" href="profile.html"><span class="icon">◉</span>PROFILE</a>
+    <a data-page="admin" href="admin.html" hidden><span class="icon">▣</span>ADMIN</a>
+  </nav>
+</div>
+
+<script src="js/seed-data.js"></script>
+<script src="js/status.js"></script>
+<script src="js/common.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
